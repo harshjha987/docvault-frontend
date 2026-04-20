@@ -21,16 +21,16 @@ export const login = (data) => api.post('/auth/login', data);
 
 // FILES
 export const uploadFile = (formData) =>
-  api.post('/upload', formData, {
+  api.post('/files/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
-export const getAllFiles = () => api.get('/files');
+export const getAllFiles = () => api.get('/files/allFiles');
 export const searchFiles = (name) => api.get(`/search?name=${name}`);
 export const downloadFile = (id) =>
-  api.get(`/${id}/download`, { responseType: 'blob' });
-export const deleteFile = (id) => api.delete(`/${id}`);
+  api.get(`/files/${id}/download`, { responseType: 'blob' });
+export const deleteFile = (id) => api.delete(`/files/${id}`);
 
 // FOLDERS
-export const getFolders = () => api.get('/folders');
-export const createFolder = (data) => api.post('/folders', data);
+export const getFolders = () => api.get('/folders/allFolders');
+export const createFolder = (data) => api.post('/folders/create', data);
 export const deleteFolder = (id) => api.delete(`/folders/${id}`);
