@@ -6,7 +6,6 @@ import {
   getFolders,
   createFolder,
   deleteFolder,
-  getAllFiles,
   getFilesByFolder
 } from '../services/api';
 import { MdDelete, MdCreateNewFolder, MdClose, MdFolder } from 'react-icons/md';

@@ -54,9 +54,7 @@ const features = [
 
 export default function Landing() {
   const { token } = useAuth();
-  if (token) {
-    return <Navigate to="/dashboard" />;
-  }
+  
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-300">
       <Navbar />
@@ -95,10 +93,10 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
     {token ? (
       <Link
-        to="/dashboard"
+        to={token ? "/dashboard" : "/register"}
         className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
   rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg">
-        Go to Dashboard
+        {token ? "Go to Dashboard" : "Create Free Account"}
         <FiArrowRight />
       </Link>
     ) : (
