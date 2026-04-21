@@ -20,9 +20,13 @@ export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
 
 // FILES
-export const uploadFile = (formData) =>
+// export const uploadFile = (formData) =>
+//   api.post('/files/upload', formData, {
+//     headers: { 'Content-Type': 'multipart/form-data' },
+//   });
+  export const uploadFile = (formData, folderId) =>
   api.post('/files/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    params: folderId ? { folderId } : {},
   });
 export const getAllFiles = () => api.get('/files/allFiles');
 export const searchFiles = (name) => api.get(`/search?name=${name}`);
