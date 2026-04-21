@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link,Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ScrollToTop from '../components/ScrollToTop';
 import { useAuth } from "../context/AuthContext";

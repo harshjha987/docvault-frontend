@@ -162,19 +162,20 @@ hover:bg-primary-50 dark:hover:bg-primary-900/20 transition">
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between
+          <div className="border-t border-gray-100 dark:border-gray-800 pt-8   sm:flex-row  
  gap-4">
             <p className="text-gray-400 text-sm">
               © 2026 DocVault. Built with ❤️ by Harsh
             </p>
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <span>All rights reserved.</span>
-              {/* <span className="font-medium text-primary-500">Spring Boot</span>
-              <span>+</span>
+            <span className="font-sm text-primary-500">All rights reserved.</span>
+            {/* <div className="flex-row items-center gap-2 text-sm text-gray-400">
+              { <span>All</span> }
+              <span className="font-medium text-primary-500">Spring Boot</span>
+              <span>rights</span>
               <span className="font-medium text-purple-500">React</span>
               <span>+</span>
-              <span className="font-medium text-yellow-500">AWS S3</span> */}
-            </div>
+              <span className="font-medium text-yellow-500">reserved</span>
+            </div> */}
           </div>
         </div>
       </footer>
