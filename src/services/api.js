@@ -24,10 +24,8 @@ export const login = (data) => api.post('/auth/login', data);
 //   api.post('/files/upload', formData, {
 //     headers: { 'Content-Type': 'multipart/form-data' },
 //   });
-  export const uploadFile = (formData, folderId) =>
-  api.post('/files/upload', formData, {
-    params: folderId ? { folderId } : {},
-  });
+export const uploadFile = (formData) =>
+api.post('/files/upload', formData);
 export const getAllFiles = () => api.get('/files/allFiles');
 export const searchFiles = (name) => api.get(`/search?name=${name}`);
 export const downloadFile = (id) =>

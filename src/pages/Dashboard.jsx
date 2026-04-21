@@ -76,7 +76,7 @@ export default function Dashboard() {
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      // if (selectedFolder) formData.append('folderId', selectedFolder);
+       if (selectedFolder) formData.append('folderId', selectedFolder);
       await uploadFile(formData, selectedFolder || undefined);
       setShowUploadModal(false);
       setSelectedFile(null);
