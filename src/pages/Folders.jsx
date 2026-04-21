@@ -73,7 +73,7 @@ export default function Folders() {
       setFolderFiles(res.data);
       
     } catch (err) {
-      console.error(err);
+      console.error("Api error",err);
     }
   };
 

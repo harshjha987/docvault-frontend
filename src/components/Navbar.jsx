@@ -11,12 +11,16 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  
+  
+
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
   return (
+    
     <nav
       className="fixed top-0 w-full z-50 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200
 dark:border-gray-700 shadow-sm"
@@ -33,13 +37,20 @@ dark:border-gray-700 shadow-sm"
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <a
+            {token ? <></>:  <a
               href="#features"
               className="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition
 font-medium"
             >
               Features
-            </a>
+            </a>}
+            {/* <a
+              href="#features"
+              className="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition
+font-medium"
+            >
+              Features
+            </a> */}
             {token ? (
               <>
                 <Link
@@ -108,12 +119,12 @@ hover:opacity-90 transition"
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden py-4 flex flex-col gap-4 border-t border-gray-200 dark:border-gray-700">
-            <a
+            {/* <a
               href="#features"
               className="text-gray-600 dark:text-gray-300 font-medium"
             >
               Features
-            </a>
+            </a> */}
             {token ? (
               <>
                 <Link

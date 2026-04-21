@@ -9,6 +9,7 @@ import {
   downloadFile,
   searchFiles,
   getFolders,
+  getFilesByFolder
 } from '../services/api';
 import {
   MdUpload,

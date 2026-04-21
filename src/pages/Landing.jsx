@@ -1,4 +1,4 @@
-import { Link,Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ScrollToTop from '../components/ScrollToTop';
 import { useAuth } from "../context/AuthContext";
@@ -181,17 +181,17 @@ export default function Landing() {
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-            Ready to get started?
+          {token ? "" : "Ready to get started"}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-lg mb-8">
-            Join and start managing your documents securely today.
+          {token ? "" : "Join and start managing your documents securely today."}
           </p>
           <Link
             to="/register"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
   rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg"
           >
-            Create Free Account
+            {token ? "Go to Dashboard" : "Create Free Account"}
             <FiArrowRight />
           </Link>
         </div>
