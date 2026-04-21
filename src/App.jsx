@@ -12,6 +12,10 @@ function ProtectedRoute({ children }) {
   const { token } = useAuth();
   return token ? children : <Navigate to="/login" />;
 }
+function PublicRoute({ children }) {
+  const { token } = useAuth();
+  return token ? <Navigate to="/dashboard" /> : children;
+}
 
 function App() {
   return (
@@ -27,15 +31,16 @@ function App() {
                 </div>
               }
             />
-            <Route
-              path="/login"
-              element={
-                <div className="page-transition">
-                  <Login />{' '}
-                </div>
-              }
-            />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={
+    <PublicRoute>
+      <Login />
+    </PublicRoute>
+  } />
+  <Route path="/register" element={
+    <PublicRoute>
+      <Register />
+    </PublicRoute>
+  } />
             <Route
               path="/dashboard"
               element={

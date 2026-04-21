@@ -69,9 +69,9 @@ export default function Folders() {
   const handleFolderClick = async (folder) => {
     setSelectedFolder(folder);
     try {
-      const res = await getAllFiles();
-      const filtered = res.data.filter((file) => file.folderId === folder.id);
-      setFolderFiles(filtered);
+      const res = await getFilesByFolder(folder.id);
+      setFolderFiles(res.data);
+      
     } catch (err) {
       console.error(err);
     }

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ScrollToTop from '../components/ScrollToTop';
+import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer"
 import {
   MdCloudUpload,
   MdSecurity,
@@ -51,6 +53,10 @@ const features = [
 ];
 
 export default function Landing() {
+  const { token } = useAuth();
+  if (token) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-300">
       <Navbar />
@@ -86,23 +92,33 @@ export default function Landing() {
           </p>
 
           {/* CTA Buttons */}
-          <div className=" animate-fadeInUp flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/register"
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8
-  py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-primary-500/25"
-            >
-              Get Started Free
-              <FiArrowRight />
-            </Link>
-            <Link
-              to="/login"
-              className="flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-gray-700 text-gray-700
-  dark:text-gray-300 px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary-500 dark:hover:border-primary-500 transition"
-            >
-              Login
-            </Link>
-          </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+    {token ? (
+      <Link
+        to="/dashboard"
+        className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
+  rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg">
+        Go to Dashboard
+        <FiArrowRight />
+      </Link>
+    ) : (
+      <>
+        <Link
+          to="/register"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
+  rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-primary-500/25">
+          Get Started Free
+          <FiArrowRight />
+        </Link>
+        <Link
+          to="/login"
+          className="flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-gray-700 text-gray-700
+  dark:text-gray-300 px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary-500 transition">
+          Login
+        </Link>
+      </>
+    )}
+  </div>
         </div>
 
         {/* Hero Image / Stats */}
@@ -182,7 +198,7 @@ export default function Landing() {
           </Link>
         </div>
       </section>
-
+              <Footer />
       <ScrollToTop />
     </div>
   );

@@ -34,3 +34,6 @@ export const deleteFile = (id) => api.delete(`/files/${id}`);
 export const getFolders = () => api.get('/folders/allFolders');
 export const createFolder = (data) => api.post('/folders/create', data);
 export const deleteFolder = (id) => api.delete(`/folders/${id}`);
+export const getFilesByFolder = (folderId) =>
+      api.get(`/files/folders/${folderId}/files`);
+
