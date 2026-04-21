@@ -60,8 +60,8 @@ export default function Landing() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 px-4">
+        <div className="max-w-4xl mx-auto text-center px-2 sm:px-4">
           {/* Badge */}
           <div
             className=" animate-fadeInUp inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-600
@@ -72,7 +72,7 @@ export default function Landing() {
           </div>
 
           {/* Heading */}
-          <h1 className="animate-fadeInUp text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+          <h1 className="animate-fadeInUp text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
             <span className="text-gray-900 dark:text-white">
               Store your docs
             </span>
@@ -90,10 +90,10 @@ export default function Landing() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
     {token ? (
       <Link
-        to={token ? "/dashboard" : "/register"}
+        to="/dashboard"
         className="flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
   rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg">
         {token ? "Go to Dashboard" : "Create Free Account"}
@@ -120,7 +120,7 @@ export default function Landing() {
         </div>
 
         {/* Hero Image / Stats */}
-        <div className="max-w-4xl mx-auto mt-20 grid grid-cols-5 gap-6">
+        <div className="max-w-4xl text-center p-4 sm:p-6 rounded-2xl mx-auto mt-20 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {[
             { number: '100%', label: 'Secure' },
             { number: '24/7', label: 'Cloud Access' },
@@ -146,7 +146,7 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+      <section id="features" className="py-20 px-4 bg-gray-50 dark:bg-gray-900 grid grid-cols-1    gap-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -157,7 +157,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, i) => (
               <div
                 key={i}
@@ -181,19 +181,28 @@ export default function Landing() {
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-          {token ? "" : "Ready to get started"}
+          {!token && (
+  <>
+    <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+      Ready to get started
+    </h2>
+    <p className="text-gray-500 dark:text-gray-400 text-lg mb-8">
+      Join and start managing your documents securely today.
+    </p>
+  </>
+)}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-lg mb-8">
           {token ? "" : "Join and start managing your documents securely today."}
           </p>
           <Link
-            to="/register"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
+  to={token ? "/dashboard" : "/register"}
+  className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-purple-500 text-white px-8 py-4
   rounded-xl font-semibold text-lg hover:opacity-90 transition shadow-lg"
-          >
-            {token ? "Go to Dashboard" : "Create Free Account"}
-            <FiArrowRight />
-          </Link>
+>
+  {token ? "Go to Dashboard" : "Create Free Account"}
+  <FiArrowRight />
+</Link>
         </div>
       </section>
               <Footer />
