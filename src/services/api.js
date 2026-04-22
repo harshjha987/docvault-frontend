@@ -31,6 +31,7 @@ export const searchFiles = (name) => api.get(`/search?name=${name}`);
 export const downloadFile = (id) =>
   api.get(`/files/${id}/download`, { responseType: 'blob' });
 export const deleteFile = (id) => api.delete(`/files/${id}`);
+export const getStats = ()=> api.get('/files/stats');
 
 // FOLDERS
 export const getFolders = () => api.get('/folders/allFolders');
@@ -38,4 +39,7 @@ export const createFolder = (data) => api.post('/folders/create', data);
 export const deleteFolder = (id) => api.delete(`/folders/${id}`);
 export const getFilesByFolder = (folderId) =>
       api.get(`/files/folders/${folderId}/files`);
+
+export const renameFolder = (id, data) => api.put(`/folders/${id}`, data);
+
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ScrollToTop from '../components/ScrollToTop';
+import { getStats } from '../services/api';
 import {
   getAllFiles,
   uploadFile,
@@ -19,6 +20,9 @@ import {
   MdInsertDriveFile,
   MdClose,
 } from 'react-icons/md';
+import { BsFileEarmarkImage, BsFileEarmarkPdf, BsFileEarmarkWord, BsFileEarmarkExcel,
+  BsFileEarmarkPpt, BsFileEarmarkZip, BsFileEarmarkPlay, BsFileEarmarkMusic,
+  BsFileEarmarkCode, BsFileEarmarkText, BsFileEarmark } from 'react-icons/bs';
 import { FiFolder } from 'react-icons/fi';
 
 export default function Dashboard() {
@@ -31,11 +35,13 @@ export default function Dashboard() {
   const [selectedFolder, setSelectedFolder] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [error, setError] = useState('');
+  const [stats, setStats] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchFiles();
     fetchFolders();
+    fetchStats();
   }, []);
 
   const fetchFiles = async () => {
@@ -53,6 +59,14 @@ export default function Dashboard() {
     try {
       const res = await getFolders();
       setFolders(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const fetchStats = async () => {
+    try {
+      const res = await getStats();
+      setStats(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -129,12 +143,22 @@ export default function Dashboard() {
   };
 
   const getFileIcon = (type) => {
-    if (type?.includes('image')) return '🖼️';
-    if (type?.includes('pdf')) return '📄';
-    if (type?.includes('word') || type?.includes('document')) return '📝';
-    if (type?.includes('excel') || type?.includes('sheet')) return '📊';
-    if (type?.includes('zip') || type?.includes('rar')) return '🗜️';
-    return '📁';
+    if (type?.includes('image')) return <BsFileEarmarkImage className="text-4xl text-blue-400" />;
+    if (type?.includes('pdf')) return <BsFileEarmarkPdf className="text-4xl text-red-500" />;
+    if (type?.includes('word') || type?.includes('document') || type?.includes('msword')) return <BsFileEarmarkWord
+  className="text-4xl text-blue-600" />;
+    if (type?.includes('excel') || type?.includes('sheet') || type?.includes('spreadsheet')) return <BsFileEarmarkExcel
+  className="text-4xl text-green-500" />;
+    if (type?.includes('presentation') || type?.includes('powerpoint')) return <BsFileEarmarkPpt className="text-4xl text-orange-500"
+   />;
+    if (type?.includes('zip') || type?.includes('rar') || type?.includes('tar') || type?.includes('gzip')) return <BsFileEarmarkZip
+  className="text-4xl text-yellow-500" />;
+    if (type?.includes('video')) return <BsFileEarmarkPlay className="text-4xl text-purple-500" />;
+    if (type?.includes('audio')) return <BsFileEarmarkMusic className="text-4xl text-pink-500" />;
+    if (type?.includes('javascript') || type?.includes('json') || type?.includes('html') || type?.includes('css') ||
+  type?.includes('xml')) return <BsFileEarmarkCode className="text-4xl text-emerald-500" />;
+    if (type?.includes('text')) return <BsFileEarmarkText className="text-4xl text-gray-500" />;
+    return <BsFileEarmark className="text-4xl text-gray-400" />;
   };
 
   return (
@@ -161,6 +185,23 @@ export default function Dashboard() {
             Upload File
           </button>
         </div>
+
+        {stats && (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
+        <p className="text-sm text-gray-400 mb-1">Total Files</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalFiles}</p>
+      </div>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
+        <p className="text-sm text-gray-400 mb-1">Storage Used</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatSize(stats.totalSize)}</p>
+      </div>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
+        <p className="text-sm text-gray-400 mb-1">Total Folders</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalFolders}</p>
+      </div>
+    </div>
+  )}
 
         {/* Search Bar */}
         <div className="relative mb-6">
@@ -197,8 +238,8 @@ export default function Dashboard() {
                 hover:border-primary-200 dark:hover:border-primary-800 transition duration-300`}
               >
                 {/* File Icon */}
-                <div className="text-4xl mb-3">
-                  {getFileIcon(file.fileType)}
+                <div className=" mb-3">
+                {getFileIcon(file.fileType)}
                 </div>
 
                 {/* File Name */}
