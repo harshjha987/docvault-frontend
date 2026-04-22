@@ -32,6 +32,8 @@ export const downloadFile = (id) =>
   api.get(`/files/${id}/download`, { responseType: 'blob' });
 export const deleteFile = (id) => api.delete(`/files/${id}`);
 export const getStats = ()=> api.get('/files/stats');
+export const shareFile = (id) => api.post(`/files/${id}/share`);
+  export const revokeShare = (id) => api.delete(`/files/${id}/share`);
 
 // FOLDERS
 export const getFolders = () => api.get('/folders/allFolders');

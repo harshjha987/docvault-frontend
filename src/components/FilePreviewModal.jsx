@@ -17,7 +17,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
     const fetchPreview = async () => {
       try {
         const res = await downloadFile(file.id);
-        const blob = res.data;
+        const blob = new Blob([res.data], { type: file.fileType });
 
         if (isTextType(file.fileType)) {
           const reader = new FileReader();

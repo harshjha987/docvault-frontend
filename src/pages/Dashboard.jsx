@@ -11,7 +11,8 @@ import { useState, useEffect } from 'react';
     downloadFile,
     searchFiles,
     getFolders,
-    getFilesByFolder
+    getFilesByFolder,
+    shareFile, revokeShare
   } from '../services/api';
   import {
     MdUpload,
@@ -21,11 +22,13 @@ import { useState, useEffect } from 'react';
     MdInsertDriveFile,
     MdClose,
     MdPreview,
+    MdShare
   } from 'react-icons/md';
   import { BsFileEarmarkImage, BsFileEarmarkPdf, BsFileEarmarkWord, BsFileEarmarkExcel,
     BsFileEarmarkPpt, BsFileEarmarkZip, BsFileEarmarkPlay, BsFileEarmarkMusic,
     BsFileEarmarkCode, BsFileEarmarkText, BsFileEarmark } from 'react-icons/bs';
   import { FiFolder } from 'react-icons/fi';
+  import ShareModal from '../components/ShareModal';
 
   export default function Dashboard() {
     const [files, setFiles] = useState([]);
@@ -40,6 +43,7 @@ import { useState, useEffect } from 'react';
     const [stats, setStats] = useState(null);
     const [previewFile, setPreviewFile] = useState(null);
     const navigate = useNavigate();
+    const [shareModalFile, setShareModalFile] = useState(null);
 
     useEffect(() => {
       fetchFiles();
@@ -144,6 +148,19 @@ import { useState, useEffect } from 'react';
         month: 'short',
         day: 'numeric',
       });
+    };
+    const handleShare = async (file) => {
+      if (file.shareToken) {
+        setShareModalFile(file);
+      } else {
+        const res = await shareFile(file.id);
+        setShareModalFile(res.data);
+        setFiles(files.map(f => f.id === file.id ? res.data : f));
+      }
+    };
+    const handleRevoke = async (id) => {
+      await revokeShare(id);
+      setFiles(files.map(f => f.id === id ? { ...f, shareToken: null } : f));
     };
 
     const getFileIcon = (type) => {
@@ -270,6 +287,14 @@ import { useState, useEffect } from 'react';
                       <MdPreview className="text-lg" />
                     </button>
                     <button
+                    onClick={() => handleShare(file)}
+                    className="flex items-center justify-center p-2 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    title="Share"
+                  >
+                    <MdShare className={`text-lg ${file.shareToken ? 'text-primary-500' : ''}`} />
+                  </button>
+                    <button
                       onClick={() => handleDownload(file.id, file.originalName)}
                       className="flex-1 flex items-center justify-center gap-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600
   dark:text-primary-400 py-2 rounded-lg text-sm font-medium hover:bg-primary-100 dark:hover:bg-primary-900/40 transition"
@@ -372,6 +397,13 @@ import { useState, useEffect } from 'react';
             onDownload={handleDownload}
           />
         )}
+         {shareModalFile && (
+    <ShareModal
+      file={shareModalFile}
+      onClose={() => setShareModalFile(null)}
+      onRevoke={handleRevoke}
+    />
+  )}
 
         <ScrollToTop />
       </div>
