@@ -55,3 +55,10 @@ export const getFilesByFolder = (folderId) =>
 export const renameFolder = (id, data) => api.put(`/folders/${id}`, data);
 
 
+ // USER
+ export const getProfile = () => api.get('/user/profile');
+ export const updateProfile = (data) => api.put('/user/profile', data);
+ export const changePassword = (data) => api.put('/user/change-password', data);
+ export const deleteAccount = () => api.delete('/user/account');
+
+

@@ -59,6 +59,11 @@ font-medium"
                 >
                   Dashboard
                 </Link>
+                <Link to="/profile"
+                className="text-gray-600 dark:text-gray-300 hover:text-primary-500 transition font-medium"
+                >
+                  
+                  Profile</Link>
                 <Link
                   to="/folders"
                   className="text-gray-600 dark:text-gray-300 hover:text-primary-500 transition font-medium"

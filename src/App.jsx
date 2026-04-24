@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Folders from './pages/Folders';
 import { useAuth } from './context/AuthContext';
+import Profile from './pages/Profile';
 
 function ProtectedRoute({ children }) {
   const { token } = useAuth();
@@ -57,6 +58,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
