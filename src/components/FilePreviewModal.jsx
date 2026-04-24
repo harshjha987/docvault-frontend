@@ -75,15 +75,18 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
       );
     }
 
-    if (type?.includes('pdf')) {
-      return (
-        <iframe
-          src={objectUrl}
-          className="w-full h-full rounded-lg"
-          title={file.originalName}
-        />
-      );
-    }
+    
+  if (type?.includes('pdf')) {
+    return (
+      <embed
+        src={objectUrl}
+        type="application/pdf"
+        className="w-full rounded-lg"
+        style={{ height: '70vh' }}
+        title={file.originalName}
+      />
+    );
+  }
 
     if (type?.startsWith('video/')) {
       return (

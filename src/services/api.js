@@ -6,7 +6,6 @@ const api = axios.create({
   baseURL: BASE_URL,
 });
 
-// attach token to every request automatically
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -14,6 +13,17 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+ api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401 && !error.config?.url?.includes('/auth/')) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    }
+  );
+
 
 // AUTH
 export const register = (data) => api.post('/auth/register', data);
