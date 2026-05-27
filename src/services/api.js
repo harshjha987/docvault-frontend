@@ -5,14 +5,27 @@ const BASE_URL = 'https://api.docvault.site/api/v1';
 const api = axios.create({
   baseURL: BASE_URL,
 });
+ const isTokenExpired = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  };
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+    const token = localStorage.getItem('token');
+    if (token) {
+      if (isTokenExpired(token)) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return Promise.reject(new Error('Token expired'));
+      }
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
  api.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -44,6 +57,9 @@ export const deleteFile = (id) => api.delete(`/files/${id}`);
 export const getStats = ()=> api.get('/files/stats');
 export const shareFile = (id) => api.post(`/files/${id}/share`);
   export const revokeShare = (id) => api.delete(`/files/${id}/share`);
+    export const moveFile = (fileId, folderId) =>
+    api.put(`/files/${fileId}/move${folderId ? `?folderId=${folderId}` : ''}`);
+
 
 // FOLDERS
 export const getFolders = () => api.get('/folders/allFolders');

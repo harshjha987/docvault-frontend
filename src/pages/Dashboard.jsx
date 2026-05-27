@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
   import ScrollToTop from '../components/ScrollToTop';
   import FilePreviewModal from '../components/FilePreviewModal';
   import { getStats } from '../services/api';
+  import { moveFile } from '../services/api'; 
+  import { FiFolder, FiMove } from 'react-icons/fi'; 
   import {
     getAllFiles,
     uploadFile,
@@ -27,7 +29,7 @@ import { useState, useEffect } from 'react';
   import { BsFileEarmarkImage, BsFileEarmarkPdf, BsFileEarmarkWord, BsFileEarmarkExcel,
     BsFileEarmarkPpt, BsFileEarmarkZip, BsFileEarmarkPlay, BsFileEarmarkMusic,
     BsFileEarmarkCode, BsFileEarmarkText, BsFileEarmark } from 'react-icons/bs';
-  import { FiFolder } from 'react-icons/fi';
+  
   import ShareModal from '../components/ShareModal';
 
   export default function Dashboard() {
@@ -44,6 +46,7 @@ import { useState, useEffect } from 'react';
     const [previewFile, setPreviewFile] = useState(null);
     const navigate = useNavigate();
     const [shareModalFile, setShareModalFile] = useState(null);
+    const [moveModalFile, setMoveModalFile] = useState(null);
 
     useEffect(() => {
       fetchFiles();
@@ -162,7 +165,15 @@ import { useState, useEffect } from 'react';
       await revokeShare(id);
       setFiles(files.map(f => f.id === id ? { ...f, shareToken: null } : f));
     };
-
+const handleMove = async (folderId) => {
+    try {
+      await moveFile(moveModalFile.id, folderId || null);
+      setMoveModalFile(null);
+      fetchFiles();
+    } catch (err) {
+      alert('Move failed');
+    }
+  };
     const getFileIcon = (type) => {
       if (type?.includes('image')) return <BsFileEarmarkImage className="text-4xl text-blue-400" />;
       if (type?.includes('pdf')) return <BsFileEarmarkPdf className="text-4xl text-red-500" />;
@@ -294,6 +305,14 @@ import { useState, useEffect } from 'react';
                   >
                     <MdShare className={`text-lg ${file.shareToken ? 'text-primary-500' : ''}`} />
                   </button>
+                   <button
+    onClick={() => setMoveModalFile(file)}
+    className="flex items-center justify-center p-2 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg
+  hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+    title="Move"
+  >
+    <FiMove className="text-lg" />
+  </button>
                     <button
                       onClick={() => handleDownload(file.id, file.originalName)}
                       className="flex-1 flex items-center justify-center gap-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600
@@ -404,6 +423,61 @@ import { useState, useEffect } from 'react';
       onRevoke={handleRevoke}
     />
   )}
+  {moveModalFile && (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 p-8 w-full
+  max-w-md">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Move File
+          </h2>
+          <button
+            onClick={() => setMoveModalFile(null)}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+          >
+            <MdClose className="text-2xl" />
+          </button>
+        </div>
+
+        {/* File name */}
+        <p className="text-sm text-gray-400 mb-4 truncate">
+          Moving: <span className="text-gray-700 dark:text-gray-300 font-medium">{moveModalFile.originalName}</span>
+        </p>
+
+        {/* Folder Dropdown */}
+        <select
+          defaultValue=""
+          id="moveFolderSelect"
+          className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800
+  text-gray-900 dark:text-white mb-6 focus:outline-none focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">Root (no folder)</option>
+          {folders
+            .filter((folder) => folder.id !== moveModalFile.folderId)
+            .map((folder) => (
+              <option key={folder.id} value={folder.id}>
+                {folder.name}
+              </option>
+            ))}
+        </select>
+
+        {/* Move Button */}
+        <button
+          onClick={() => {
+            const selected = document.getElementById('moveFolderSelect').value;
+            handleMove(selected || null);
+          }}
+          className="w-full bg-gradient-to-r from-primary-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:opacity-90
+   transition"
+        >
+          Move
+        </button>
+      </div>
+    </div>
+  )}
+
 
         <ScrollToTop />
       </div>

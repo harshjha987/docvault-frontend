@@ -1,10 +1,25 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState,useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [user, setUser] = useState(null);
+   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+      } catch {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    }
+  }, []);
 
   const login = (token) => {
     setToken(token);
