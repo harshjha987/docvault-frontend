@@ -1,4 +1,4 @@
- import { useEffect } from 'react';
+import { useEffect } from 'react';
   import { useNavigate } from 'react-router-dom';
 
   export default function OAuthCallback() {
@@ -10,7 +10,8 @@
 
       if (token) {
         localStorage.setItem('token', token);
-        navigate('/dashboard');
+        // force a full page redirect instead of react router navigation
+        window.location.href = '/dashboard';
       } else {
         navigate('/login');
       }
