@@ -126,6 +126,21 @@ export default function Login() {
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
+          <div className="mt-4">
+    <div className="relative flex items-center justify-center mb-4">
+      <div className="border-t border-gray-200 dark:border-gray-700 w-full"></div>
+      <span className="bg-white dark:bg-gray-900 px-3 text-sm text-gray-400 absolute">or</span>
+    </div>
+
+    <a
+      href="https://api.docvault.site/oauth2/authorization/google"
+      className="w-full flex items-center justify-center gap-3 border border-gray-200 dark:border-gray-700 rounded-xl py-3
+  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition font-medium"
+    >
+      <img src="https://www.google.com/favicon.ico" className="w-5 h-5" />
+      Continue with Google
+    </a>
+  </div>
 
           <p className="text-center text-gray-500 dark:text-gray-400 mt-6 text-sm">
             Don't have an account?{' '}
@@ -137,6 +152,7 @@ export default function Login() {
             </Link>
           </p>
         </div>
+        
       </div>
     </div>
   );
