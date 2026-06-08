@@ -49,8 +49,8 @@ export const login = (data) => api.post('/auth/login', data);
 //   });
 export const uploadFile = (formData) =>
 api.post('/files/upload', formData);
-export const getAllFiles = () => api.get('/files/allFiles');
-export const searchFiles = (name) => api.get(`/search?name=${name}`);
+export const getAllFiles = (page=0,size=10) => api.get(`/files/allFiles?page=${page}&size=${size}`);
+export const searchFiles = (name) => api.get(`/files/search?name=${name}`);
 export const downloadFile = (id) =>
   api.get(`/files/${id}/download`, { responseType: 'blob' });
 export const deleteFile = (id) => api.delete(`/files/${id}`);

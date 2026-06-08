@@ -47,6 +47,9 @@ import { useState, useEffect } from 'react';
     const navigate = useNavigate();
     const [shareModalFile, setShareModalFile] = useState(null);
     const [moveModalFile, setMoveModalFile] = useState(null);
+     const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
     useEffect(() => {
       fetchFiles();
@@ -57,7 +60,10 @@ import { useState, useEffect } from 'react';
     const fetchFiles = async () => {
       try {
         const res = await getAllFiles();
-        setFiles(res.data);
+      setFiles(res.data.content);      
+      setCurrentPage(res.data.page);
+      setTotalPages(res.data.totalPages);
+      setTotalElements(res.data.totalElements);
       } catch (err) {
         if (err.response?.status === 401) navigate('/login');
       } finally {
@@ -87,11 +93,18 @@ import { useState, useEffect } from 'react';
       const query = e.target.value;
       setSearchQuery(query);
       if (query.trim() === '') {
-        fetchFiles();
+        fetchFiles(0);
       } else {
+      try {
         const res = await searchFiles(query);
         setFiles(res.data);
+        setTotalPages(0);
+        setCurrentPage(0);
+        setTotalElements(res.data.length);
+      } catch (err) {
+        console.error('Search failed:', err);
       }
+    }
     };
 
     const handleUpload = async () => {
@@ -205,7 +218,8 @@ const handleMove = async (folderId) => {
                 My Files
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-1">
-                {files.length} file{files.length !== 1 ? 's' : ''} stored
+                
+  {searchQuery ? files.length : totalElements} file{(searchQuery ? files.length : totalElements) !== 1 ? 's' : ''} stored
               </p>
             </div>
             <button
@@ -334,6 +348,27 @@ const handleMove = async (folderId) => {
             </div>
           )}
         </div>
+        {totalPages > 1 && (
+    <div className="flex items-center justify-center gap-4 mt-6">
+      <button
+        onClick={() => fetchFiles(currentPage - 1)}
+        disabled={currentPage === 0}
+        className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 disabled:opacity-40"
+      >
+        Previous
+      </button>
+      <span className="text-sm text-gray-600 dark:text-gray-400">
+        Page {currentPage + 1} of {totalPages}
+      </span>
+      <button
+        onClick={() => fetchFiles(currentPage + 1)}
+        disabled={currentPage === totalPages - 1}
+        className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
+  )}
 
         {/* Upload Modal */}
         {showUploadModal && (
