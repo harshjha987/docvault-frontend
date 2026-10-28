@@ -1,19 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Folders from './pages/Folders';
-import { useAuth } from './context/AuthContext';
 import Profile from './pages/Profile';
- import OAuthCallback from './pages/OAuthCallback';
+import OAuthCallback from './pages/OAuthCallback';
 
 function ProtectedRoute({ children }) {
   const { token } = useAuth();
   return token ? children : <Navigate to="/login" />;
 }
+
 function PublicRoute({ children }) {
   const { token } = useAuth();
   return token ? <Navigate to="/dashboard" /> : children;
@@ -25,42 +26,13 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <div className="page-transition">
-                  <Landing />
-                </div>
-              }
-            />
-            <Route path="/login" element={
-   
-      <Login />
-   
-  } />
-  <Route path="/register" element={
-   
-      <Register />
-    
-  } />
-   <Route path="/oauth2/callback" element={<OAuthCallback />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/folders"
-              element={
-                <ProtectedRoute>
-                  <Folders />
-                </ProtectedRoute>
-              }
-            />
-             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/" element={<div className="page-transition"><Landing /></div>} />
+            <Route path="/login"    element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+            <Route path="/oauth2/callback" element={<OAuthCallback />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/folders"   element={<ProtectedRoute><Folders /></ProtectedRoute>} />
+            <Route path="/profile"   element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
